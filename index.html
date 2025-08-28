@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>बातचीत - वस्तुनिष्ठ प्रश्नोत्तरी</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            flex-direction: column; /* To stack ad and container */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .ad-container {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        h1, h2 {
+            color: #1a73e8;
+            text-align: center;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
+        #question-area {
+            min-height: 150px;
+            margin-bottom: 20px;
+        }
+
+        #question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .options label:hover {
+            background-color: #e8f0fe;
+        }
+        
+        .options input[type="radio"]:checked + span {
+            font-weight: bold;
+            color: #1a73e8;
+        }
+        
+        .options label.selected {
+             background-color: #e8f0fe;
+             border-color: #1a73e8;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 12px;
+        }
+        
+        #navigation-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .nav-btn {
+            padding: 12px 25px;
+            font-size: 1em;
+            font-weight: bold;
+            color: #fff;
+            background-color: #1a73e8;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #155ab3;
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn#prev-btn {
+            background-color: #6c757d;
+        }
+        .nav-btn#prev-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #welcome-container, #results-container {
+            text-align: center;
+        }
+
+        #quiz-container, #results-container {
+            display: none;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        #progress-indicator {
+            font-weight: bold;
+            color: #555;
+        }
+
+        #score-breakdown {
+            text-align: center;
+            margin: 25px 0;
+            font-size: 1.3em;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .correct-summary {
+            color: #4caf50;
+            font-weight: 600;
+        }
+        .incorrect-summary {
+            color: #f44336;
+            font-weight: 600;
+        }
+        .unanswered-summary {
+            color: #6c757d;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ====== Top Ad Slot ====== -->
+    <div class="ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '4b505c9273cf9161c278efee028f35e2',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/4b505c9273cf9161c278efee028f35e2/invoke.js"></script>
+    </div>
+
+    <!-- ====== Main Quiz Container ====== -->
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcome-container">
+            <h1>बातचीत - वस्तुनिष्ठ प्रश्नोत्तरी</h1>
+            <p>टेस्ट शुरू करने से पहले कृपया अपना नाम दर्ज करें।</p>
+            <input type="text" id="userName" placeholder="अपना नाम यहाँ लिखें">
+            <button class="nav-btn" id="start-btn" style="width: 100%;">क्विज़ शुरू करें</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-container">
+            <h2>कक्षा 12 | हिंदी पाठ - 1 "बातचीत"</h2>
+            <div id="question-area">
+                <!-- Current Question will be loaded here -->
+            </div>
+            
+            <!-- ====== Middle Banner Ad Slot ====== -->
+            <div style="text-align: center; margin: 20px 0;">
+                <script type="text/javascript">
+                    atOptions = {
+                        'key' : '4b505c9273cf9161c278efee028f35e2',
+                        'format' : 'iframe',
+                        'height' : 50,
+                        'width' : 320,
+                        'params' : {}
+                    };
+                </script>
+                <script type="text/javascript" src="//www.highperformanceformat.com/4b505c9273cf9161c278efee028f35e2/invoke.js"></script>
+            </div>
+
+            <div id="navigation-area">
+                <button class="nav-btn" id="prev-btn">पिछला</button>
+                <span id="progress-indicator"></span>
+                <button class="nav-btn" id="next-btn">अगला</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-container">
+            <h2 id="result-heading">आपका परिणाम</h2>
+            <p id="score-text" style="font-size: 1.5em; font-weight: bold; text-align: center;"></p>
+            <div id="score-breakdown"></div>
+            <button class="nav-btn" id="retry-btn" style="margin-top:20px; width: 100%;">फिर से प्रयास करें</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { question: "बालकृष्ण भट्ट की रचना 'बातचीत' क्या है?", options: ["एकांकी", "कहानी", "यात्रा संस्मरण", "ललित निबंध"], answer: "D" },
+            { question: "बालकृष्ण भट्ट किस युग के निबंधकार थे?", options: ["प्रसाद युग", "भारतेंदु युग", "द्विवेदी युग", "स्वातंत्र्योत्तर युग"], answer: "B" },
+            { question: "'बातचीत' शीर्षक निबंध के निबंधकार कौन हैं?", options: ["जयप्रकाश नारायण", "मोहन राकेश", "नामवर सिंह", "बालकृष्ण भट्ट"], answer: "D" },
+            { question: "बालकृष्ण भट्ट का जन्म कब हुआ था?", options: ["23 जून, 1884", "23 जून, 1844", "20 जुलाई, 1902", "18 दिसंबर, 1834"], answer: "B" },
+            { question: "बालकृष्ण भट्ट का निधन कब हुआ था?", options: ["20 जुलाई, 1914", "10 जून, 1905", "15 मार्च, 1909", "21 अप्रैल, 1918"], answer: "A" },
+            { question: "बालकृष्ण भट्ट का निवास स्थान कहाँ था?", options: ["लखनऊ, उत्तर प्रदेश", "पटना, बिहार", "वाराणसी, उत्तर प्रदेश", "इलाहाबाद, उत्तर प्रदेश"], answer: "D" },
+            { question: "'बोलने से ही मनुष्य के रूप का साक्षात्कार होता है।' यह किसने कहा?", options: ["एडीसन", "बेन जॉनसन", "मिल्टन", "स्पेंसर"], answer: "B" },
+            { question: "असल बातचीत सिर्फ दो व्यक्तियों में ही हो सकती है, यह किसका मत है?", options: ["एडीसन", "बेन जॉनसन", "मिल्टन", "प्लेटो"], answer: "A" },
+            { question: "'आर्ट ऑफ कन्वर्सेशन' कहाँ के लोगों में सर्वाधिक प्रचलित है?", options: ["अफ्रीका के", "भारत के", "यूरोप के", "कनाडा के"], answer: "C" },
+            { question: "बालकृष्ण भट्ट ने किस पत्रिका का संपादन किया था?", options: ["आर्यावर्त", "हुंकार", "हिन्दी प्रदीप", "पंजाब केसरी"], answer: "C" },
+            { question: "भट्ट जी ने 'हिन्दी प्रदीप' पत्रिका का संचालन कितने वर्षों तक किया था?", options: ["30 वर्ष", "31 वर्ष", "32 वर्ष", "33 वर्ष"], answer: "D" },
+            { question: "किसके न होने से सृष्टि गूँगी प्रतीत होती है?", options: ["श्रवणशक्ति", "वाक्शक्ति", "दिव्यशक्ति", "स्मरणशक्ति"], answer: "B" },
+            { question: "रॉबिंसन क्रूसो को कब तक मनुष्य का मुख देखने को नहीं मिला था?", options: ["10 वर्ष तक", "12 वर्ष तक", "16 वर्ष तक", "18 वर्ष तक"], answer: "C" },
+            { question: "रॉबिंसन क्रूसो ने 16 वर्ष के उपरांत किसके मुख से एक बात सुनी?", options: ["एडीसन के", "फ्राइडे के", "स्टील के", "संडे के"], answer: "B" },
+            { question: "'संयोगिता स्वयंवर' किसकी रचना है?", options: ["श्रीनिवास दास की", "बालकृष्ण भट्ट की", "प्रताप नारायण मिश्र की", "मैथिलीशरण गुप्त की"], answer: "A" },
+            { question: "'नूतन ब्रह्मचारी' क्या है?", options: ["नाटक", "उपन्यास", "कहानी", "निबंध"], answer: "B" },
+            { question: "'सौ अजान एक सुजान' उपन्यास के रचनाकार कौन हैं?", options: ["रामधारी सिंह दिनकर", "बालकृष्ण भट्ट", "श्रीनिवास दास", "अज्ञेय"], answer: "B" },
+            { question: "'रेल का विकट खेल' किसकी कृति है?", options: ["मोहन राकेश", "जयशंकर प्रसाद", "बालकृष्ण भट्ट", "जगदीश चंद्र माथुर"], answer: "C" },
+            { question: "बालकृष्ण भट्ट किस काल के रचनाकार हैं?", options: ["आदिकाल", "भक्तिकाल", "रीतिकाल", "आधुनिक काल"], answer: "D" },
+            { question: "बालकृष्ण भट्ट के पिता का क्या नाम था?", options: ["देनी प्रसाद भट्ट", "बेनी प्रसाद भट्ट", "राम प्रसाद भट्ट", "शिव प्रसाद भट्ट"], answer: "B" },
+            { question: "बालकृष्ण भट्ट की माता का क्या नाम था?", options: ["सावित्री देवी", "पार्वती देवी", "राधिका देवी", "सुमित्रा देवी"], answer: "B" },
+            { question: "'बातचीत' के माध्यम से बालकृष्ण भट्ट क्या बतलाना चाहते हैं?", options: ["बातचीत की शैली", "भाषण की शैली", "संवाद की शैली", "इनमें से कोई नहीं"], answer: "A" },
+            { question: "बातचीत का उत्तम तरीका क्या है?", options: ["दूसरों की सुनना", "तर्कपूर्ण बात करना", "आत्मवार्तालाप (अपने आप से बात करना)", "जोर-जोर से बोलना"], answer: "C" },
+            { question: "मनुष्य के अंदर जो मवाद या धुआँ जमा रहता है, वह कैसे बाहर निकलता है?", options: ["लड़ाई करके", "रोकर", "बातचीत के जरिये", "हँसकर"], answer: "C" },
+            { question: "जब तक मनुष्य बोलता नहीं, तब तक उसका क्या प्रकट नहीं होता?", options: ["सुंदरता", "अच्छाई-बुराई", "गुण-दोष", "व्यक्तित्व"], answer: "C" },
+            { question: "बातचीत से मन किस प्रकार का हो जाता है?", options: ["क्रोधी", "भारी और बोझिल", "हल्का और स्वच्छ", "इनमें से कोई नहीं"], answer: "C" },
+            { question: "दो बुढ़ियों की बातचीत का मुख्य प्रकरण क्या होता है?", options: ["देश की राजनीति", "बहू-बेटों का गिला-शिकवा", "सामाजिक समस्याएँ", "धार्मिक चर्चा"], answer: "B" },
+            { question: "'राम-रमौवल' किसे कहा गया है?", options: ["दो लोगों की बातचीत को", "तीन लोगों की बातचीत को", "चार से अधिक लोगों की बातचीत को", "अकेले में बात करने को"], answer: "C" },
+            { question: "बातचीत करने का हुनर किसके पास है?", options: ["अमेरिकी लोगों के पास", "जापानियों के पास", "यूरोप के लोगों के पास", "हम भारतीयों के पास"], answer: "C" },
+            { question: "कौन-सी रचना बालकृष्ण भट्ट की नहीं है?", options: ["नूतन ब्रह्मचारी", "सद्भाव का अभाव", "सौ अजान एक सुजान", "परीक्षा गुरु"], answer: "D" }
+        ];
+
+        // --- DOM Element References ---
+        const welcomeContainer = document.getElementById('welcome-container');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultsContainer = document.getElementById('results-container');
+        
+        const startBtn = document.getElementById('start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const retryBtn = document.getElementById('retry-btn');
+
+        const questionArea = document.getElementById('question-area');
+        const scoreText = document.getElementById('score-text');
+        const scoreBreakdown = document.getElementById('score-breakdown');
+        const userNameInput = document.getElementById('userName');
+        const resultHeading = document.getElementById('result-heading');
+        const progressIndicator = document.getElementById('progress-indicator');
+        
+        // --- State Variables ---
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let currentUserName = '';
+
+        // --- Functions ---
+        function showQuestion(index) {
+            const questionData = quizData[index];
+            let questionHTML = `<div id="question-text">${index + 1}. ${questionData.question}</div>
+                                <div class="options">`;
+            
+            questionData.options.forEach((option, i) => {
+                const optionLetter = String.fromCharCode(65 + i);
+                const isChecked = userAnswers[index] === optionLetter ? 'checked' : '';
+                questionHTML += `<label>
+                    <input type="radio" name="q${index}" value="${optionLetter}" ${isChecked}>
+                    <span>(${optionLetter}) ${option}</span>
+                </label>`;
+            });
+            
+            questionHTML += `</div>`;
+            questionArea.innerHTML = questionHTML;
+
+            progressIndicator.innerText = `प्रश्न ${index + 1} / ${quizData.length}`;
+            prevBtn.classList.toggle('hidden', index === 0);
+            nextBtn.innerText = (index === quizData.length - 1) ? 'क्विज़ सबमिट करें' : 'अगला';
+            
+            document.querySelectorAll(`input[name="q${index}"]`).forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    document.querySelectorAll(`#question-area .options label`).forEach(label => label.classList.remove('selected'));
+                    e.target.parentElement.classList.add('selected');
+                });
+            });
+
+            if (userAnswers[index]) {
+                const selectedRadio = document.querySelector(`input[name="q${index}"][value="${userAnswers[index]}"]`);
+                if (selectedRadio) selectedRadio.parentElement.classList.add('selected');
+            }
+        }
+        
+        function saveAnswer() {
+            const selectedOption = document.querySelector(`input[name="q${currentQuestionIndex}"]:checked`);
+            if (selectedOption) userAnswers[currentQuestionIndex] = selectedOption.value;
+        }
+
+        function startQuiz() {
+            currentUserName = userNameInput.value.trim();
+            if (currentUserName === "") {
+                alert("कृपया अपना नाम दर्ज करें!");
+                return;
+            }
+            
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            
+            welcomeContainer.style.display = 'none';
+            resultsContainer.style.display = 'none';
+            quizContainer.style.display = 'block';
+            
+            showQuestion(currentQuestionIndex);
+        }
+
+        function showResults() {
+            let score = 0;
+            let unansweredCount = 0;
+
+            quizData.forEach((item, index) => {
+                if (userAnswers[index] === null) {
+                    unansweredCount++;
+                } else if (userAnswers[index] === item.answer) {
+                    score++;
+                }
+            });
+
+            const incorrectCount = quizData.length - score - unansweredCount;
+
+            resultHeading.innerText = `बहुत बढ़िया, ${currentUserName}!`;
+            scoreText.innerText = `आपका कुल स्कोर: ${quizData.length} में से ${score}`;
+            
+            scoreBreakdown.innerHTML = `
+                <span class="correct-summary">✓ सही: <strong>${score}</strong></span>
+                <span class="incorrect-summary">✗ गलत: <strong>${incorrectCount}</strong></span>
+                <span class="unanswered-summary">? छोड़े गए: <strong>${unansweredCount}</strong></span>
+            `;
+
+            quizContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+        }
+
+        // --- Event Listeners ---
+        startBtn.addEventListener('click', startQuiz);
+
+        nextBtn.addEventListener('click', () => {
+            saveAnswer();
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(currentQuestionIndex);
+            } else {
+                showResults();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            saveAnswer();
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion(currentQuestionIndex);
+            }
+        });
+
+        retryBtn.addEventListener('click', () => {
+            resultsContainer.style.display = 'none';
+            welcomeContainer.style.display = 'block';
+            userNameInput.value = '';
+        });
+
+    </script>
+</body>
+</html>
